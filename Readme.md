@@ -131,7 +131,7 @@ methods.forEach(function(method) {
 5. 挂载 app 到某个端口的时候，app 的 handle 方法就被挂载到了回调中，当请求过来的时候，触发流程如下：
 
 ```javascript
-//app()=>
+//[https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L38](app())=>
 //app.handle()=>
 //app._route.handle()=>
 //next()  next 函数中通过while stack来处理 逻辑，当前游标的位置=>
