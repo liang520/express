@@ -166,7 +166,7 @@ methods.forEach(function(method) {
 - [app()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L38)=>
 - [app.handle()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L39)=>
 - [app._route.handle()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/application.js#L186)=>
-- [next()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L180)  next 函数中通过while stack来处理查询符合当前路由的layer，取出之后再往下执行，在全局之中维护了一个idx游标，当前游标的位置=>
+- [next()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L180)  next 函数中通过while stack来处理查询符合当前路由的layer，取出之后再往下执行，在全局之中维护了一个idx游标，当前游标的位置=>(如果匹配当前路由的layer，当前layer下还有一个堆栈维护，当前路由的所有中间件)
 - [self.process_params()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L279) 解析是否有参数=>回调
 - [trim_prefix(layer, layerError, layerPath, path)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L288)=>
 - [layer.handle_request(req, res, next)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L323) 每个中间件的处理逻辑=>
