@@ -115,7 +115,7 @@ methods.forEach(function(method) {
      *
      *
      * route.dispatch.bind(route)
-     * 是正常路由的时候，把route.dispatch存起来
+     * 是正常路由的时候，把route.dispatch存起来,最后通过dispatch来维护当前路由下的所有中间件
      */
     var route = this._router.route(path);
 
