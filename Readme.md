@@ -131,9 +131,9 @@ methods.forEach(function(method) {
 5. 挂载 app 到某个端口的时候，app 的 handle 方法就被挂载到了回调中，当请求过来的时候，触发流程如下：
 
 
-[https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L38](app())=>
-[https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L39](app.handle())=>
-[https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/application.js#L186](app._route.handle())=>
+[app()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L38)=>
+[app.handle()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L39)=>
+[app._route.handle()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/application.js#L186)=>
 [https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L180](next())  next 函数中通过while stack来处理 逻辑，当前游标的位置=>
 [https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L279](self.process_params()) 解析是否有参数=>回调
 [https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L288](trim_prefix(layer, layerError, layerPath, path))=>
