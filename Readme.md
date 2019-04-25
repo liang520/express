@@ -131,17 +131,17 @@ methods.forEach(function(method) {
 5. 挂载 app 到某个端口的时候，app 的 handle 方法就被挂载到了回调中，当请求过来的时候，触发流程如下：
 
 
-[app()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L38)=>
-[app.handle()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L39)=>
-[app._route.handle()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/application.js#L186)=>
-[next()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L180)  next 函数中通过while stack来处理 逻辑，当前游标的位置=>
-[self.process_params()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L279) 解析是否有参数=>回调
-[trim_prefix(layer, layerError, layerPath, path)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L288)=>
-[layer.handle_request(req, res, next)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L323) 每个中间件的处理逻辑=>
- [fn(req, res, next)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/layer.js#L99) =>
+- [app()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L38)=>
+- [app.handle()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L39)=>
+- [app._route.handle()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/application.js#L186)=>
+- [next()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L180)  next 函数中通过while stack来处理 逻辑，当前游标的位置=>
+- [self.process_params()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L279) 解析是否有参数=>回调
+- [trim_prefix(layer, layerError, layerPath, path)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L288)=>
+- [layer.handle_request(req, res, next)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L323) 每个中间件的处理逻辑=>
+- [fn(req, res, next)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/layer.js#L99) =>
  fn中间件函数具体处理逻辑 fn中含有next方法
  如果是某个路由上，手动挂载的，就触发Route.prototype.dispatch ,这个方法中也维护了某个路由下的中间件处理函数，中间也包含用next
- next() =>
+- next() =>
 最后到了自己的处理函数
 
 
