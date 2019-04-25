@@ -123,6 +123,38 @@ methods.forEach(function(method) {
      * 把当前路由下所有的中间件函数放入到单签路由堆栈中
      */
     route[method].apply(route, slice.call(arguments, 1));
+    /**
+    
+      methods.forEach(function(method) {
+        Route.prototype[method] = function() {
+          var handles = flatten(slice.call(arguments));
+
+          for (var i = 0; i < handles.length; i++) {
+            var handle = handles[i];
+
+            if (typeof handle !== "function") {
+              var type = toString.call(handle);
+              var msg =
+                "Route." +
+                method +
+                "() requires a callback function but got a " +
+                type;
+              throw new Error(msg);
+            }
+
+            debug("%s %o", method, this.path);
+
+            var layer = Layer("/", {}, handle);
+            layer.method = method;
+
+            this.methods[method] = true;
+            this.stack.push(layer);
+          }
+
+          return this;
+        };
+      });
+    */
     return this;
   };
 });
