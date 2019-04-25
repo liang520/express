@@ -115,7 +115,7 @@ methods.forEach(function(method) {
      *
      *
      * route.dispatch.bind(route)
-     * 是正常路由的时候，把route.dispatch存起来
+     * 是正常路由的时候，把route.dispatch存起来,最后通过dispatch来维护当前路由下的所有中间件
      */
     var route = this._router.route(path);
 
@@ -123,6 +123,38 @@ methods.forEach(function(method) {
      * 把当前路由下所有的中间件函数放入到单签路由堆栈中
      */
     route[method].apply(route, slice.call(arguments, 1));
+    /**
+    
+      methods.forEach(function(method) {
+        Route.prototype[method] = function() {
+          var handles = flatten(slice.call(arguments));
+
+          for (var i = 0; i < handles.length; i++) {
+            var handle = handles[i];
+
+            if (typeof handle !== "function") {
+              var type = toString.call(handle);
+              var msg =
+                "Route." +
+                method +
+                "() requires a callback function but got a " +
+                type;
+              throw new Error(msg);
+            }
+
+            debug("%s %o", method, this.path);
+
+            var layer = Layer("/", {}, handle);
+            layer.method = method;
+
+            this.methods[method] = true;
+            this.stack.push(layer);
+          }
+
+          return this;
+        };
+      });
+    */
     return this;
   };
 });
@@ -130,19 +162,19 @@ methods.forEach(function(method) {
 
 5. 挂载 app 到某个端口的时候，app 的 handle 方法就被挂载到了回调中，当请求过来的时候，触发流程如下：
 
-```javascript
-//app()=>
-//app.handle()=>
-//app._route.handle()=>
-//next()  next 函数中通过while stack来处理 逻辑，当前游标的位置=>
-//self.process_params() 解析是否有参数=>回调
-//trim_prefix(layer, layerError, layerPath, path)=>
-//layer.handle_request(req, res, next) 每个中间件的处理逻辑=>
-// fn(req, res, next) =>
-// fn中间件函数具体处理逻辑 fn中含有next方法
-// 如果是某个路由上，手动挂载的，就触发Route.prototype.dispatch ,这个方法中也维护了某个路由下的中间件处理函数，中间也包含用next
-// next() =>
-//最后到了自己的处理函数
-```
+
+- [app()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L38)=>
+- [app.handle()](https://github.com/liang520/express/blob/f3addcc00b64ef9e5d2080d6e1397b00e9eea7c9/lib/express.js#L39)=>
+- [app._route.handle()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/application.js#L186)=>
+- [next()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L180)  next 函数中通过while stack来处理查询符合当前路由的layer，取出之后再往下执行，在全局之中维护了一个idx游标，当前游标的位置=>(如果匹配当前路由的layer，当前layer下还有一个堆栈维护，当前路由的所有中间件)
+- [self.process_params()](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L279) 解析是否有参数=>回调
+- [trim_prefix(layer, layerError, layerPath, path)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L288)=>
+- [layer.handle_request(req, res, next)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/index.js#L323) 每个中间件的处理逻辑=>
+- [fn(req, res, next)](https://github.com/liang520/express/blob/caf8c0365f317b52868134dbeb6c714fe5e1a18a/lib/router/layer.js#L99) =>
+ fn中间件函数具体处理逻辑 fn中含有next方法
+ 如果是某个路由上，手动挂载的，就触发Route.prototype.dispatch ,这个方法中也维护了某个路由下的中间件处理函数，中间也包含用next
+- next() =>
+最后到了自己的处理函数
+
 
 [![Express Logo](https://i.cloudup.com/zfY6lL7eFa-3000x3000.png)](http://expressjs.com/)
